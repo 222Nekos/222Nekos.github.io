@@ -29,7 +29,7 @@ window.onload = function() {
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
 
-	var Bgm = Sound.load("images/memo4-2.mp3");
+	//var Bgm = Sound.load("images/memo4-2.mp3");
 
 	game.onload = function() {
 
