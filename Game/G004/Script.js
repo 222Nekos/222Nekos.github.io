@@ -64,7 +64,7 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			Bgm.play();
+			//Bgm.play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
