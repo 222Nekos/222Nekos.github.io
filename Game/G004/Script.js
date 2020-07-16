@@ -29,9 +29,11 @@ window.onload = function() {
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
 
+	var Bgm = Sound.load("images/memo4-2.mp3");
+
 	game.onload = function() {
 
-		///////////////////////////////////////////////// グローバル変数 
+		///////////////////////////////////////////////// グローバル変数
 		var LevelFCnt = 0;   //シーン：レベル表示の経過フレーム数
 		var MainFCnt = 0;    //シーン：ゲーム画面の経過フレーム数
 		var ClearFCnt = 0;   //シーン：クリア画面の経過フレーム数
@@ -62,6 +64,7 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
+			Bgm.play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
