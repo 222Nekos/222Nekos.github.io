@@ -47,13 +47,11 @@ window.onload = function() {
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
 
-		//game.Bgm = Sound.load("images/memo4-2.mp3");
-
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
-			//game.Bgm.play();
+			game.assets['images/memo4-2.mp3'].play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
@@ -73,7 +71,7 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			game.assets['images/memo4-2.mp3'].play();
+			//game.assets['images/memo4-2.mp3'].play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
