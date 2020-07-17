@@ -72,7 +72,7 @@ window.onload = function() {
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
 			if(flgSound == true) {
-				game.assets['images/memo4-2.mp3'].clone().play();
+				game.assets['images/memo4-2.mp3'].play();
 				flgSound = false;
 			};
 			LevelFCnt += 1;
@@ -100,7 +100,6 @@ window.onload = function() {
 				labLevel.x = 40;
 				labLevel.text = "LEVEL MAX"
 			};
-			game.assets['images/memo4-2.mp3'].play();
 		};
 
 		///////////////////////////////////////////////// シーン：ゲーム画面
