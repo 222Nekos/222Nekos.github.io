@@ -28,7 +28,7 @@ window.onload = function() {
 	game.preload("images/animal4.png");
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
-	game.preload("images/memo4-2.mp3");
+	//game.preload("images/memo4-2.mp3");
 
 	game.onload = function() {
 
