@@ -46,6 +46,7 @@ window.onload = function() {
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
+			game.Bgm.play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
@@ -65,7 +66,7 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			game.Bgm.play();
+			//game.Bgm.play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
