@@ -46,6 +46,7 @@ window.onload = function() {
 		var Level = 1;       //レベル（ステージ）
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
+		var flgSound = true;
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -53,7 +54,6 @@ window.onload = function() {
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
-			game.assets['images/memo4-2.mp3'].play();
 		};
 		game.rootScene.addChild(sprTitleBg);
 
@@ -71,7 +71,10 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			//game.assets['images/memo4-2.mp3'].play();
+			if(flgSound == true) {
+				game.assets['images/memo4-2.mp3'].play();
+				flgSound = false;
+			};
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
@@ -97,6 +100,7 @@ window.onload = function() {
 				labLevel.x = 40;
 				labLevel.text = "LEVEL MAX"
 			};
+			game.assets['images/memo4-2.mp3'].play();
 		};
 
 		///////////////////////////////////////////////// シーン：ゲーム画面
@@ -112,6 +116,7 @@ window.onload = function() {
 				RemoveCell();
 				game.replaceScene(senGameOver);
 			};
+			flgSound = true;
 		};
 		senMain.addChild(sprMainBg);
 
