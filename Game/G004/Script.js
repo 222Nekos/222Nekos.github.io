@@ -51,9 +51,9 @@ window.onload = function() {
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
-			game.assets['images/memo4-2.mp3'].play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
+			game.assets['images/memo4-2.mp3'].play();
 		};
 		game.rootScene.addChild(sprTitleBg);
 
