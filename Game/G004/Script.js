@@ -40,13 +40,13 @@ window.onload = function() {
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
 		
-		game.Bgm = Sound.load("images/memo4-2.mp3");
+		//game.Bgm = Sound.load("images/memo4-2.mp3");
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
-			game.Bgm.play();
+			//game.Bgm.play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
