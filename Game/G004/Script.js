@@ -46,7 +46,7 @@ window.onload = function() {
 		var Level = 1;       //レベル（ステージ）
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
-		var flgSound = true;
+		//var flgSound = true;
 		
 		game.bgm = Sound.load('images/memo4-2.mp3')
 
@@ -118,7 +118,7 @@ window.onload = function() {
 				RemoveCell();
 				game.replaceScene(senGameOver);
 			};
-			flgSound = true;
+			//flgSound = true;
 		};
 		senMain.addChild(sprMainBg);
 
