@@ -40,20 +40,25 @@ window.onload = function() {
 	game.onload = function() {
 
 		///////////////////////////////////////////////// グローバル変数
-		var LevelFCnt = 0;   //シーン：レベル表示の経過フレーム数
-		var MainFCnt = 0;    //シーン：ゲーム画面の経過フレーム数
-		var ClearFCnt = 0;   //シーン：クリア画面の経過フレーム数
-		var Level = 1;       //レベル（ステージ）
-		var Score = 0;       //スコア
-		var BonusCnt = 1;    //ボーナス倍率
-		var flgSound = true;
-		
-		//game.bgm = Sound.load('images/memo4-2.mp3')
+		var LevelFCnt = 0;    //シーン：レベル表示の経過フレーム数
+		var MainFCnt = 0;     //シーン：ゲーム画面の経過フレーム数
+		var ClearFCnt = 0;    //シーン：クリア画面の経過フレーム数
+		var Level = 1;        //レベル（ステージ）
+		var Score = 0;        //スコア
+		var BonusCnt = 1;     //ボーナス倍率
+		//var flgSound = true;  //音楽再生フラグ
+
+		//game.bgm = Sound.load("images/memo4-2.mp3");
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
+			//if(flgSound == true) {
+			//	game.assets['images/memo4-2.mp3'].play();
+			//	flgSound = false;
+			//};
+			//game.bgm.play;
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
@@ -73,14 +78,15 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			if(flgSound == true) {
-				game.assets['images/memo4-2.mp3'].play();
-				flgSound = false;
-			};
-			//game.bgm.play();
+			//if(flgSound == true) {
+			//	game.assets['images/memo4-2.mp3'].play();
+			//	flgSound = false;
+			//};
+			//game.bgm.play;
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
+				game.assets['images/memo4-2.mp3'].play();
 				game.replaceScene(senMain);
 				MainFCnt = 0;
 			};
@@ -118,7 +124,6 @@ window.onload = function() {
 				RemoveCell();
 				game.replaceScene(senGameOver);
 			};
-			flgSound = true;
 		};
 		senMain.addChild(sprMainBg);
 
@@ -158,7 +163,7 @@ window.onload = function() {
 				senMain.addChild(this);
 			}
 		});
-		
+
 		var clsCry = Class.create(Sprite, {  //犬小屋の中身のクラス宣言
 			initialize: function(x, y, Scale, Type) {
 				Sprite.call(this, 110, 88);
@@ -208,7 +213,7 @@ window.onload = function() {
 		var sprCell;
 		var sprCry;
 		var PreMain = function(Level) {  //シーン：ゲーム画面への遷移前処理
-			Cellx = new Array();  
+			Cellx = new Array();
 			Celly = new Array();
 			switch(Level) {
 				case 1:
