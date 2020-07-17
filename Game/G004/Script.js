@@ -447,6 +447,7 @@ window.onload = function() {
 		senGameOver.addChild(sprRetry);
 
 		var PreGameOver = function(Type) {  //シーン：ゲームオーバーへの遷移前処理
+			game.assets['images/memo4-2.mp3'].stop();
 			switch(Type) {
 				case 1:
 					sprNyan.opacity = 1;
