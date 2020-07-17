@@ -1,5 +1,12 @@
 enchant();
 
+enchant.Sound.enabledInMobileSafari = true;
+
+if(location.protocol == 'file:'){
+    enchant.ENV.USE_WEBAUDIO = false;
+    console.log('1');
+}
+
 var SCREEN_WIDTH  = 400;  //画面の幅
 var SCREEN_HEIGHT = 500;  //画面の高さ
 
@@ -28,7 +35,7 @@ window.onload = function() {
 	game.preload("images/animal4.png");
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
-	//game.preload("images/memo4-2.mp3");
+	game.preload("images/memo4-2.mp3");
 
 	game.onload = function() {
 
@@ -39,7 +46,7 @@ window.onload = function() {
 		var Level = 1;       //レベル（ステージ）
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
-		
+
 		//game.Bgm = Sound.load("images/memo4-2.mp3");
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
@@ -66,7 +73,7 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			//game.Bgm.play();
+			game.assets['images/memo4-2.mp3'].play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
