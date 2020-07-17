@@ -54,7 +54,7 @@ window.onload = function() {
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
-			game.assets['images/memo4-2.mp3'].play();
+			//game.assets['images/memo4-2.mp3'].play();
 			//game.bgm.play;
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
@@ -83,7 +83,7 @@ window.onload = function() {
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
-				//game.assets['images/memo4-2.mp3'].play();
+				game.assets['images/memo4-2.mp3'].play();
 				game.replaceScene(senMain);
 				MainFCnt = 0;
 			};
