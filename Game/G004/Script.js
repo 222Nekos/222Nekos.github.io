@@ -47,6 +47,8 @@ window.onload = function() {
 		var Score = 0;       //スコア
 		var BonusCnt = 1;    //ボーナス倍率
 		var flgSound = true;
+		
+		game.bgm = Sound.load('images/memo4-2.mp3')
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -71,10 +73,11 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			if(flgSound == true) {
-				game.assets['images/memo4-2.mp3'].play();
-				flgSound = false;
-			};
+			//if(flgSound == true) {
+			//	game.assets['images/memo4-2.mp3'].play();
+			//	flgSound = false;
+			//};
+			game.bgm.play();
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
@@ -447,7 +450,7 @@ window.onload = function() {
 		senGameOver.addChild(sprRetry);
 
 		var PreGameOver = function(Type) {  //シーン：ゲームオーバーへの遷移前処理
-			game.assets['images/memo4-2.mp3'].stop();
+			//game.assets['images/memo4-2.mp3'].stop();
 			switch(Type) {
 				case 1:
 					sprNyan.opacity = 1;
