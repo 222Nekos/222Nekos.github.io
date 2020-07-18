@@ -77,7 +77,7 @@ window.onload = function() {
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
-				if(BonusCnt == 1) game.assets['images/memo4-2.mp3'].play();
+				if(Level == 1) game.assets['images/memo4-2.mp3'].play();
 				if(BonusCnt == 4) game.assets['images/memo4-2.mp3'].play();
 				if(BonusCnt == 10) game.assets['images/memo4-2.mp3'].play();
 				if(BonusCnt == 16) game.assets['images/memo4-2.mp3'].play();
