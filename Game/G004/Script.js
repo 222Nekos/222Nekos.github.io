@@ -36,26 +36,25 @@ window.onload = function() {
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
 	game.preload("images/memo4-2.mp3");
+	game.preload("images/question1.mp3");
+	game.preload("images/correct1.mp3");
+	game.preload("images/incorrect1.mp3");
 
 	game.onload = function() {
 
 		///////////////////////////////////////////////// グローバル変数
-		var LevelFCnt = 0;    //シーン：レベル表示の経過フレーム数
-		var MainFCnt = 0;     //シーン：ゲーム画面の経過フレーム数
-		var ClearFCnt = 0;    //シーン：クリア画面の経過フレーム数
-		var Level = 1;        //レベル（ステージ）
-		var Score = 0;        //スコア
-		var BonusCnt = 1;     //ボーナス倍率
-		//var flgSound = true;  //音楽再生フラグ
-
-		//game.bgm = Sound.load("images/memo4-2.mp3");
+		var LevelFCnt = 0;  //シーン：レベル表示の経過フレーム数
+		var MainFCnt = 0;   //シーン：ゲーム画面の経過フレーム数
+		var ClearFCnt = 0;  //シーン：クリア画面の経過フレーム数
+		var Level = 1;      //レベル（ステージ）
+		var Score = 0;      //スコア
+		var BonusCnt = 1;   //ボーナス倍率
 
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets["images/title.png"];
 		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
-			//game.assets['images/memo4-2.mp3'].play();
-			//game.bgm.play;
+			game.assets['images/question1.mp3'].clone().play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
@@ -75,15 +74,14 @@ window.onload = function() {
 		var sprLevelBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprLevelBg.image = game.assets["images/field.png"];
 		sprLevelBg.onenterframe = function() {  // 1秒経過でシーン遷移
-			//if(flgSound == true) {
-			//	game.assets['images/memo4-2.mp3'].play();
-			//	flgSound = false;
-			//};
-			//game.bgm.play;
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
-				game.assets['images/memo4-2.mp3'].play();
+				if(BonusCnt == 1) game.assets['images/memo4-2.mp3'].play();
+				if(BonusCnt == 4) game.assets['images/memo4-2.mp3'].play();
+				if(BonusCnt == 10) game.assets['images/memo4-2.mp3'].play();
+				if(BonusCnt == 16) game.assets['images/memo4-2.mp3'].play();
+				if(BonusCnt == 22) game.assets['images/memo4-2.mp3'].play();
 				game.replaceScene(senMain);
 				MainFCnt = 0;
 			};
@@ -106,6 +104,7 @@ window.onload = function() {
 				labLevel.x = 40;
 				labLevel.text = "LEVEL MAX"
 			};
+			game.assets['images/question1.mp3'].clone().play();
 		};
 
 		///////////////////////////////////////////////// シーン：ゲーム画面
@@ -339,6 +338,7 @@ window.onload = function() {
 		var ClearSec;
 		var GetScore;
 		var PreClear = function() {  //シーン：クリアへの遷移前処理
+			game.assets['images/correct1.mp3'].clone().play();
 			ClearSec = LastSec;
 			GetScore = CellNum * 2 * (120 - MainFCnt) * Level * BonusCnt;
 			Score = Score + GetScore;
@@ -446,6 +446,7 @@ window.onload = function() {
 			BonusCnt = 1;
 			labLevel.x = 80;
 			labLevel.text = "LEVEL 1";
+			game.assets['images/question1.mp3'].clone().play();
 			game.replaceScene(senLevel);
 			LevelFCnt = 0;
 		};
@@ -453,6 +454,7 @@ window.onload = function() {
 
 		var PreGameOver = function(Type) {  //シーン：ゲームオーバーへの遷移前処理
 			game.assets['images/memo4-2.mp3'].stop();
+			game.assets['images/incorrect1.mp3'].clone().play();
 			switch(Type) {
 				case 1:
 					sprNyan.opacity = 1;
