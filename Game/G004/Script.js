@@ -35,7 +35,7 @@ window.onload = function() {
 	game.preload("images/animal4.png");
 	game.preload("images/animal5.png");
 	game.preload("images/retry.png");
-	game.preload("images/memo4-2.mp3");
+	game.preload("images/bgm2-4.mp3");
 	game.preload("images/question1.mp3");
 	game.preload("images/correct1.mp3");
 	game.preload("images/incorrect1.mp3");
@@ -77,11 +77,10 @@ window.onload = function() {
 			LevelFCnt += 1;
 			if(LevelFCnt > 24) {
 				PreMain(Level);
-				if(Level == 1) game.assets['images/memo4-2.mp3'].play();
-				if(BonusCnt == 4) game.assets['images/memo4-2.mp3'].play();
-				if(BonusCnt == 10) game.assets['images/memo4-2.mp3'].play();
-				if(BonusCnt == 16) game.assets['images/memo4-2.mp3'].play();
-				if(BonusCnt == 22) game.assets['images/memo4-2.mp3'].play();
+				if(Level == 1) game.assets['images/bgm2-4.mp3'].play();
+				if(BonusCnt == 10) game.assets['images/bgm2-4.mp3'].play();
+				if(BonusCnt == 20) game.assets['images/bgm2-4.mp3'].play();
+				if(BonusCnt == 30) game.assets['images/bgm2-4.mp3'].play();
 				game.replaceScene(senMain);
 				MainFCnt = 0;
 			};
@@ -453,7 +452,7 @@ window.onload = function() {
 		senGameOver.addChild(sprRetry);
 
 		var PreGameOver = function(Type) {  //シーン：ゲームオーバーへの遷移前処理
-			game.assets['images/memo4-2.mp3'].stop();
+			game.assets['images/bgm2-4.mp3'].stop();
 			game.assets['images/incorrect1.mp3'].clone().play();
 			switch(Type) {
 				case 1:
