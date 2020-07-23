@@ -15,11 +15,9 @@ window.onload = function() {
 	game.preload('images/hukubtn.png');
 	game.preload('images/hukuhito.png');
 	game.preload('images/kaze.png');
-	game.preload('images/good.png');
-	game.preload('images/bad1.png');
-	game.preload('images/bad2.png');
+	game.preload('images/mess.png');
 	game.preload('images/retrybtn.png');
-	game.preload('images/scale2.png');
+	game.preload('images/scale.png');
 
 	game.onload = function() {
 
@@ -61,13 +59,21 @@ window.onload = function() {
 				for(i = 0; i < MimiNum; i++) {  // i = 0~(みみずく数 -1)
 					Pow[i] = Pow[i] - MtrSpd[i];
 					if(Pow[i] <= -201) Pow[i] = 0;
-					//labPow.text = Pow;
 					surface[i].clear();
 					surface[i].context.fillRect (PowMtrX[i], 220, 10, Pow[i]);
 				};
 			};
 			if(State == 3) {  // シーン：ゲーム画面＆吹くボタン押下後
 				MainFCnt += 1;
+				for(i = 0; i < MimiNum; i++) {  // i = 0~(みみずく数 -1)
+					sprKaze[i].x -= 2;
+				};
+				if (MainFCnt > 24) {            // 1秒経過で吹く人と風消す
+					for(i = 0; i < MimiNum; i++) {  // i = 0~(みみずく数 -1)
+						senMain.removeChild(sprHukuhito[i]);
+						senMain.removeChild(sprKaze[i]);
+					};
+				};
 				if (MainFCnt > 48) {            // 2秒経過でシーン遷移
 					if(GoodCnt >= ClearLine) {  // クリア条件を満たしていたら
 						PreClear();
@@ -87,7 +93,7 @@ window.onload = function() {
 					};
 				};
 			};
-			if(State == 4) {  //シーン：クリア
+			if(State == 4) {  // シーン：クリア
 				ClearFCnt += 1;
 				if(ClearFCnt > 48) {  // 2秒経過でシーン遷移
 					GoodCnt = 0;
@@ -104,21 +110,12 @@ window.onload = function() {
 		///////////////////////////////////////////////// ルートシーン：タイトル
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets['images/title.png'];
-		sprTitleBg.ontouchend = function() {  //画面タッチでシーン遷移
+		sprTitleBg.ontouchend = function() {  // 画面タッチでシーン遷移
 			game.replaceScene(senLevel);
 			State = 1;
 			LevelFCnt = 0;
 		};
 		game.rootScene.addChild(sprTitleBg);
-
-		var labStart = new Label();  //タッチ促進表示
-		labStart.font = '20px Meiryo';
-		labStart.color = 'rgba(255,255,255,1)';  //色、RGB + 透明度
-		labStart.width = SCREEN_WIDTH;           //幅、右端で折り返す
-		labStart.x = 110;
-		labStart.y = 350;
-		labStart.text = 'TOUCH TO START';
-		game.rootScene.addChild(labStart);
 
 		///////////////////////////////////////////////// シーン：レベル表示
 		var senLevel = new Scene();
@@ -126,7 +123,7 @@ window.onload = function() {
 		sprLevelBg.image = game.assets['images/field.png'];
 		senLevel.addChild(sprLevelBg);
 
-		var labLevel = new Label();  //レベル表示
+		var labLevel = new Label();  // レベル表示
 		labLevel.font = '60px Meiryo';
 		labLevel.color = 'rgba(255,255,255,1)';
 		labLevel.width = SCREEN_WIDTH;
@@ -135,13 +132,27 @@ window.onload = function() {
 		labLevel.text = 'LEVEL 1';
 		senLevel.addChild(labLevel);
 
-		var PreLevel = function() {  //シーン：レベル表示への遷移前処理
+		var labClearLine = new Label();  // クリアライン表示
+		labClearLine.font = '20px Meiryo';
+		labClearLine.color = 'rgba(255,255,255,1)';
+		labClearLine.width = SCREEN_WIDTH;
+		labClearLine.x = 60;
+		labClearLine.y = 270;
+		labClearLine.text = '1 匹 ぞくぞくさせればクリア！';
+		senLevel.addChild(labClearLine);
+
+		var PreLevel = function() {  // シーン：レベル表示への遷移前処理
 			if(Level < 5) Level += 1;
 			labLevel.text = 'LEVEL ' + Level;
 			if(Level == 5) {
-				labLevel.x = 40;
+				labLevel.x = 30;
 				labLevel.text = 'LEVEL MAX';
 			};
+			if(Level == 1) labClearLine.text = '1 匹 ぞくぞくさせればクリア！';
+			if(Level == 2) labClearLine.text = '1 匹 ぞくぞくさせればクリア！';
+			if(Level == 3) labClearLine.text = '2 匹 ぞくぞくさせればクリア！';
+			if(Level == 4) labClearLine.text = '3 匹 ぞくぞくさせればクリア！';
+			if(Level == 5) labClearLine.text = '5 匹 ぞくぞくさせればクリア！';
 		};
 
 		///////////////////////////////////////////////// シーン：ゲーム画面
@@ -150,7 +161,7 @@ window.onload = function() {
 		sprMainBg.image = game.assets['images/field.png'];
 		senMain.addChild(sprMainBg);
 
-		var labLastSec = new Label();  //残り秒数表示
+		var labLastSec = new Label();  // 残り秒数表示
 		labLastSec.font = '20px Meiryo';
 		labLastSec.color = 'rgba(255,255,255,1)';
 		labLastSec.width = SCREEN_WIDTH;
@@ -158,7 +169,7 @@ window.onload = function() {
 		labLastSec.y = 460;
 		senMain.addChild(labLastSec);
 
-		var clsMimi = Class.create(Sprite, {  //みみずくのクラス宣言
+		var clsMimi = Class.create(Sprite, {  // みみずくのクラス宣言
 			initialize: function(x, y, Scale) {
 				Sprite.call(this, 207, 207);
 				this.x = x;
@@ -166,6 +177,30 @@ window.onload = function() {
 				this.scale(Scale, Scale);
 				this.image = game.assets['images/mimizuku.png'];
 				this.frame = 0;
+				senMain.addChild(this);
+			}
+		});
+
+		var clsHukuhito = Class.create(Sprite, {  // 吹く人のクラス宣言
+			initialize: function(x, y, Scale) {
+				Sprite.call(this, 120, 90);
+				this.x = x;
+				this.y = y;
+				this.scale(Scale, Scale);
+				this.image = game.assets['images/hukuhito.png'];
+				this.opacity = 0;
+				senMain.addChild(this);
+			}
+		});
+
+		var clsKaze = Class.create(Sprite, {  // 風のクラス宣言
+			initialize: function(x, y, Scale) {
+				Sprite.call(this, 96, 44);
+				this.x = x;
+				this.y = y;
+				this.scale(Scale, Scale);
+				this.image = game.assets['images/kaze.png'];
+				this.opacity = 0;
 				senMain.addChild(this);
 			}
 		});
@@ -182,66 +217,69 @@ window.onload = function() {
 		var surface;
 		var Pow;
 		var MtrSpd;
-		//var CryPosi;
+		var AjsPosi;
 		var sprMimi;
-		var sprCry;
-		var PreMain = function(Level) {  //シーン：ゲーム画面への遷移前処理
+		var sprHukuhito;
+		var sprKaze;
+		var PreMain = function(Level) {  // シーン：ゲーム画面への遷移前処理
 			MimiX = new Array();
 			MimiY = new Array();
 			PowMtrX = new Array();
 			switch(Level) {
 				case 1:
-					ClearLine = 1;    //クリアに必要な「たまらん」数
-					MimiNum = 1;      //みみずくの設置数
-					MimiScale = 1;    //みみずくの表示倍率
-					//CryPosi = 40;   //吹き出しのＹ座標調整値
-					MimiX   = [ 20];  //みみずくのＸ座標
-					MimiY   = [150];  //みみずくのＹ座標
-					PowMtrX = [185];  //パワーメーターのＸ座標
+					ClearLine = 1;    // クリアに必要な「たまらん」数
+					MimiNum = 1;      // みみずくの設置数
+					MimiScale = 1;    // みみずくの表示倍率
+					AjsPosi = 0;      // 吹き出しのＹ座標調整値
+					MimiX   = [ 50];  // みみずくのＸ座標
+					MimiY   = [170];  // みみずくのＹ座標
+					PowMtrX = [295];  // パワーメーターのＸ座標
 					break;
 				case 2:
 					ClearLine = 1;
 					MimiNum = 2;
 					MimiScale = 1;
-					//CryPosi = 40;
-					MimiX   = [ 20, 120];
-					MimiY   = [200, 200];
-					PowMtrX = [185, 205];
+					AjsPosi = 0;
+					MimiX   = [ 10, 150];
+					MimiY   = [170, 170];
+					PowMtrX = [325, 340];
 					break;
 				case 3:
 					ClearLine = 2;
 					MimiNum = 4;
-					MimiScale = 1;
-					//CryPosi = 40;
-					MimiX   = [ 20, 120,  20, 120];
-					MimiY   = [100, 100, 200, 200];
-					PowMtrX = [185, 205, 225, 245];
+					MimiScale = 0.8;
+					AjsPosi = 40;
+					MimiX   = [  0,   0, 120, 240];
+					MimiY   = [ 80, 200, 200, 200];
+					PowMtrX = [280, 295, 310, 325];
 					break;
 				case 4:
 					ClearLine = 3;
 					MimiNum = 6;
-					MimiScale = 1;
-					//CryPosi = 32;
-					MimiX   = [ 20, 100, 180,  20, 100, 180];
-					MimiY   = [100, 100, 100, 200, 200, 200];
-					PowMtrX = [185, 205, 225, 245, 265, 285];
+					MimiScale = 0.8;
+					AjsPosi = 40;
+					MimiX   = [-10,  80, -10,  80, 170, 260];
+					MimiY   = [ 80,  80, 200, 200, 200, 200];
+					PowMtrX = [265, 280, 295, 310, 325, 340];
 					break;
 				case 5:
 					ClearLine = 5;
 					MimiNum = 10;
-					MimiScale = 1;
-					//CryPosi = 28;
-					MimiX   = [ 20,  80, 160, 240, 300,  20,  80, 160, 240, 300];
-					MimiY   = [100, 100, 100, 100, 100, 200, 200, 200, 200, 200];
-					PowMtrX = [185, 205, 225, 245, 265, 285, 305, 325, 345, 365];
+					MimiScale = 0.6;
+					AjsPosi = 80;
+					MimiX   = [-50,   0,  50, 100, -50,   0,  50, 100, 150, 200];
+					MimiY   = [ 80,  80,  80,  80, 200, 200, 200, 200, 200, 200];
+					PowMtrX = [235, 250, 265, 280, 295, 310, 325, 340, 355, 370];
 					break;
 			};
 
 			sprMimi = new Array();
-			//sprCry = new Array();
-			for(i = 0; i < MimiNum; i++) {  //みみずくのインスタンス作成
+			sprHukuhito = new Array();
+			sprKaze = new Array();
+			for(i = 0; i < MimiNum; i++) {  // みみずく・吹く人・風のインスタンス作成
 				sprMimi[i] = new clsMimi(MimiX[i], MimiY[i], MimiScale);
-				//sprCry[i] = new clsCry(MimiX[i], MimiY[i] - CryPosi, MimiScale, MtrSpd[i]);
+				sprHukuhito[i] = new clsHukuhito(MimiX[i] + 200 - AjsPosi, MimiY[i] - 45 + AjsPosi, MimiScale);
+				sprKaze[i] = new clsKaze(MimiX[i] + 130 - AjsPosi, MimiY[i] + AjsPosi, MimiScale);
 			};
 
 			sprPowMtr = new Array();  // パワーメーター
@@ -261,9 +299,9 @@ window.onload = function() {
 
 		};
 
-		var sprScale = new Sprite(400, 201);  // スケール
-		sprScale.image = game.assets['images/scale2.png'];
-		sprScale.x = 0;
+		var sprScale = new Sprite(145, 201);  // スケール
+		sprScale.image = game.assets['images/scale.png'];
+		sprScale.x = 235;
 		sprScale.y = 20;
 		senMain.addChild(sprScale);
 
@@ -276,17 +314,19 @@ window.onload = function() {
 					State = 3;     //状態変更し、処理重複防止
 					MainFCnt = 0;  //フレームカウントリセット
 					for(i = 0; i < MimiNum; i++) {
-						if(Pow[i] < -120) {                    // 強すぎる
+						sprHukuhito[i].opacity = 1;
+						sprKaze[i].opacity = 1;
+						if(Pow[i] < -130) {                    // 強すぎる
 							Bad2Cnt += 1;
 							sprMimi[i].frame = 3;
 						};
-						if(Pow[i] >= -120 && Pow[i] <= -80) {  // ちょうどいい
+						if(Pow[i] >= -130 && Pow[i] <= -70) {  // ちょうどいい
 							GoodCnt += 1;
-							surface[i].context.fillStyle = "pink";
+							surface[i].context.fillStyle = "yellow";
 							surface[i].context.fillRect (PowMtrX[i], 220, 10, Pow[i]);
 							sprMimi[i].frame = 1;
 						};
-						if(Pow[i] > -80) {                     // 弱すぎる
+						if(Pow[i] > -70) {                     // 弱すぎる
 							Bad1Cnt += 1;
 							sprMimi[i].frame = 2;
 						};
@@ -295,7 +335,7 @@ window.onload = function() {
 		};
 		senMain.addChild(sprHukuBtn);
 
-		var RemoveObj = function() {  //画面遷移前にオブジェクト削除
+		var RemoveObj = function() {  // 画面遷移前にオブジェクト削除
 			for(i = 0; i < MimiNum; i++) {
 				senMain.removeChild(sprPowMtr[i]);
 				senMain.removeChild(surface[i]);
@@ -309,20 +349,21 @@ window.onload = function() {
 		sprClearBg.image = game.assets['images/field.png'];
 		senClear.addChild(sprClearBg);
 
-		var sprGood = new Sprite(334, 143);  //「たまらん」画像
-		sprGood.image = game.assets['images/good.png'];
-		sprGood.x = 60;
-		sprGood.y = 40;
-		senClear.addChild(sprGood);
-
-		var sprMimi2 = new Sprite(207, 207);  //みみずく画像
+		var sprMimi2 = new Sprite(207, 207);  // みみずく画像
 		sprMimi2.image = game.assets['images/mimizuku.png'];
 		sprMimi2.frame = 1;
 		sprMimi2.x = 100;
 		sprMimi2.y = 150;
 		senClear.addChild(sprMimi2);
 
-		var labBonus = new Label();  //ボーナス表示
+		var sprMess = new Sprite(300, 150);  //「たまらん」画像
+		sprMess.image = game.assets['images/mess.png'];
+		sprMess.frame = 0;
+		sprMess.x = 50;
+		sprMess.y = 10;
+		senClear.addChild(sprMess);
+
+		var labBonus = new Label();  // ボーナス表示
 		labBonus.font = '20px Meiryo';
 		labBonus.color = 'rgba(255,255,255,1)';
 		labBonus.width = SCREEN_WIDTH;
@@ -331,7 +372,7 @@ window.onload = function() {
 		labBonus.opacity = 0;
 		senClear.addChild(labBonus);
 
-		var labClearSec = new Label();  //正解時残り時間
+		var labClearSec = new Label();  // 正解時残り時間
 		labClearSec.font = '20px Meiryo';
 		labClearSec.color = 'rgba(255,255,255,1)';
 		labClearSec.width = SCREEN_WIDTH;
@@ -339,7 +380,7 @@ window.onload = function() {
 		labClearSec.y = 400;
 		senClear.addChild(labClearSec);
 
-		var labGetScore = new Label();  //獲得スコア
+		var labGetScore = new Label();  // 獲得スコア
 		labGetScore.font = '20px Meiryo';
 		labGetScore.color = 'rgba(255,255,255,1)';
 		labGetScore.width = SCREEN_WIDTH;
@@ -347,7 +388,7 @@ window.onload = function() {
 		labGetScore.y = 430;
 		senClear.addChild(labGetScore);
 
-		var labScore = new Label();  //合計スコア
+		var labScore = new Label();  // 合計スコア
 		labScore.font = '20px Meiryo';
 		labScore.color = 'rgba(255,255,255,1)';
 		labScore.width = SCREEN_WIDTH;
@@ -357,9 +398,9 @@ window.onload = function() {
 
 		var ClearSec;
 		var GetScore;
-		var PreClear = function() {  //シーン：クリアへの遷移前処理
+		var PreClear = function() {  // シーン：クリアへの遷移前処理
 			ClearSec = LastSec;
-			GetScore = MimiNum * 2 * (120 - MainFCnt) * Level * BonusCnt;
+			GetScore = GoodCnt * 2 * (240 - MainFCnt) * Level * BonusCnt;
 			Score = Score + GetScore;
 			if(BonusCnt > 1) {
 				labBonus.text = 'LEVEL MAX CLEAR BONUS x' + BonusCnt + ' !!';
@@ -367,8 +408,8 @@ window.onload = function() {
 			};
 			if(Level == 5) BonusCnt += 1;
 			labClearSec.text = '残り時間     ' + ClearSec + ' 秒';
-			labGetScore.text = '獲得スコア  ' + GetScore;
-			labScore.text = '合計スコア  ' + Score;
+			labGetScore.text = '獲得スコア  ' + GetScore + ' ぞく';
+			labScore.text = '合計スコア  ' + Score + ' ぞく';
 		};
 
 		///////////////////////////////////////////////// シーン：ゲームオーバー
@@ -377,43 +418,36 @@ window.onload = function() {
 		sprGameOverBg.image = game.assets['images/field.png'];
 		senGameOver.addChild(sprGameOverBg);
 
-		var sprBad = new Sprite(330, 102);  //「激しすぎる」画像
-		sprBad.image = game.assets['images/bad2.png'];
-		sprBad.x = 30;
-		sprBad.y = 30;
-		senGameOver.addChild(sprBad);
-
-		var sprMimi3 = new Sprite(207, 207);  //みみずく画像
+		var sprMimi3 = new Sprite(207, 207);  // みみずく画像
 		sprMimi3.image = game.assets['images/mimizuku.png'];
 		sprMimi3.x = 100;
 		sprMimi3.y = 120;
 		senGameOver.addChild(sprMimi3);
 
-		/* var sprTokei = new Sprite(188, 200);  //時計画像
-		sprTokei.image = game.assets['images/tokei.png'];
-		sprTokei.x = 107;
-		sprTokei.y = 161;
-		sprTokei.opacity = 0;
-		senGameOver.addChild(sprTokei); */
+		var sprMess2 = new Sprite(300, 150);  // 「激しすぎる」画像
+		sprMess2.image = game.assets['images/mess.png'];
+		sprMess2.x = 50;
+		sprMess2.y = 10;
+		senGameOver.addChild(sprMess2);
 
-		var labCome = new Label();  //小屋の中身コメント
-		labCome.font = '30px Meiryo';
+		var labCome = new Label();  // コメント
+		labCome.font = '20px Meiryo';
 		labCome.color = 'rgba(255,255,255,1)';
 		labCome.width = SCREEN_WIDTH;
-		labCome.x = 90;
+		labCome.x = 20;
 		labCome.y = 350;
 		senGameOver.addChild(labCome);
 
-		var labBonus2 = new Label();  //レベル５クリア回数表示
+		var labBonus2 = new Label();  // レベル５クリア回数表示
 		labBonus2.font = '16px Meiryo';
 		labBonus2.color = 'rgba(255,255,255,1)';
 		labBonus2.width = SCREEN_WIDTH;
-		labBonus2.x = 160;
+		labBonus2.x = 180;
 		labBonus2.y = 440;
 		labBonus2.opacity = 0;
 		senGameOver.addChild(labBonus2);
 
-		var labScore2 = new Label();  //スコア表示
+		var labScore2 = new Label();  // スコア表示
 		labScore2.font = '20px Meiryo';
 		labScore2.color = 'rgba(255,255,255,1)';
 		labScore2.width = SCREEN_WIDTH;
@@ -421,11 +455,11 @@ window.onload = function() {
 		labScore2.y = 460;
 		senGameOver.addChild(labScore2);
 
-		var sprRetryBtn = new Sprite(154, 98);  //リトライボタン
+		var sprRetryBtn = new Sprite(154, 98);  // リトライボタン
 		sprRetryBtn.image = game.assets['images/retrybtn.png'];
-		sprRetryBtn.x = 20;
+		sprRetryBtn.x = 15;
 		sprRetryBtn.y = 390;
-		sprRetryBtn.ontouchend = function() {  //リトライ処理
+		sprRetryBtn.ontouchend = function() {  // リトライ処理
 			GoodCnt = 0;
 			Bad1Cnt = 0;
 			Bad2Cnt = 0;
@@ -434,32 +468,36 @@ window.onload = function() {
 			BonusCnt = 1;
 			labLevel.x = 80;
 			labLevel.text = 'LEVEL 1';
+			labClearLine.text = '1 匹 ぞくぞくさせればクリア！';
 			game.replaceScene(senLevel);
 			State = 1;
 			LevelFCnt = 0;
 		};
 		senGameOver.addChild(sprRetryBtn);
 
-		var PreGameOver = function(Type) {  //シーン：ゲームオーバーへの遷移前処理
+		var PreGameOver = function(Type) {  // シーン：ゲームオーバーへの遷移前処理
 			switch(Type) {
 				case 1:
 					sprMimi3.frame = 2;
-					labCome.text = Bad1Cnt + ' 匹   弱すぎでした。';
+					sprMess2.frame = 1;
+					labCome.text = Bad1Cnt + ' 匹 弱すぎ、' + Bad2Cnt + ' 匹 激しすぎでした。';
 					break;
 				case 2:
 					sprMimi3.frame = 3;
-					labCome.text = Bad2Cnt + ' 匹 激しすぎでした。';
+					sprMess2.frame = 2;
+					labCome.text = Bad1Cnt + ' 匹 弱すぎ、' + Bad2Cnt + ' 匹 激しすぎでした。';
 					break;
 				case 3:
-					sprMimi3.frame = 2;
-					labCome.text = '時間切れ     でした。';
+					sprMimi3.frame = 0;
+					sprMess2.frame = 3;
+					labCome.text = '          時間切れ でした。';
 					break;
 			};
 			if(BonusCnt > 1) {
 				labBonus2.text = 'LEVEL MAX ' + (BonusCnt - 1) + '回クリア！';
 				labBonus2.opacity = 1;
 			};
-			labScore2.text = 'スコア  ' + Score;
+			labScore2.text = 'スコア  ' + Score + ' ぞく';
 		};
 
 	};
