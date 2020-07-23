@@ -1,5 +1,12 @@
 enchant();
 
+enchant.Sound.enabledInMobileSafari = true;
+
+if(location.protocol == 'file:'){
+    enchant.ENV.USE_WEBAUDIO = false;
+    console.log('1');
+}
+
 var SCREEN_WIDTH  = 400;  // 画面の幅
 var SCREEN_HEIGHT = 500;  // 画面の高さ
 
@@ -18,6 +25,11 @@ window.onload = function() {
 	game.preload('images/mess.png');
 	game.preload('images/retrybtn.png');
 	game.preload('images/scale.png');
+	game.preload('images/bgm2-6.mp3');
+	game.preload("images/question1.mp3");
+	game.preload("images/spray1.mp3");
+	game.preload("images/correct1.mp3");
+	game.preload("images/incorrect1.mp3");
 
 	game.onload = function() {
 
@@ -40,6 +52,10 @@ window.onload = function() {
 				LevelFCnt += 1;
 				if(LevelFCnt > 24) {  // 1秒経過でシーン遷移
 					PreMain(Level);
+					if(Level == 1) game.assets['images/bgm2-6.mp3'].play();
+					if(BonusCnt == 10) game.assets['images/bgm2-6.mp3'].play();
+					if(BonusCnt == 20) game.assets['images/bgm2-6.mp3'].play();
+					if(BonusCnt == 30) game.assets['images/bgm2-6.mp3'].play();
 					game.replaceScene(senMain);
 					State = 2;
 					MainFCnt = 0;
@@ -111,6 +127,7 @@ window.onload = function() {
 		var sprTitleBg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
 		sprTitleBg.image = game.assets['images/title.png'];
 		sprTitleBg.ontouchend = function() {  // 画面タッチでシーン遷移
+			game.assets['images/question1.mp3'].clone().play();
 			game.replaceScene(senLevel);
 			State = 1;
 			LevelFCnt = 0;
@@ -153,6 +170,7 @@ window.onload = function() {
 			if(Level == 3) labClearLine.text = '2 匹 ぞくぞくさせればクリア！';
 			if(Level == 4) labClearLine.text = '3 匹 ぞくぞくさせればクリア！';
 			if(Level == 5) labClearLine.text = '5 匹 ぞくぞくさせればクリア！';
+			game.assets['images/question1.mp3'].clone().play();
 		};
 
 		///////////////////////////////////////////////// シーン：ゲーム画面
@@ -311,6 +329,7 @@ window.onload = function() {
 		sprHukuBtn.y = 390;
 		sprHukuBtn.ontouchend = function() {  //吹きかけ処理
 			if(State == 2) {
+					game.assets['images/spray1.mp3'].clone().play();
 					State = 3;     //状態変更し、処理重複防止
 					MainFCnt = 0;  //フレームカウントリセット
 					for(i = 0; i < MimiNum; i++) {
@@ -399,6 +418,7 @@ window.onload = function() {
 		var ClearSec;
 		var GetScore;
 		var PreClear = function() {  // シーン：クリアへの遷移前処理
+			game.assets['images/correct1.mp3'].clone().play();
 			ClearSec = LastSec;
 			GetScore = GoodCnt * 2 * (240 - MainFCnt) * Level * BonusCnt;
 			Score = Score + GetScore;
@@ -469,6 +489,7 @@ window.onload = function() {
 			labLevel.x = 80;
 			labLevel.text = 'LEVEL 1';
 			labClearLine.text = '1 匹 ぞくぞくさせればクリア！';
+			game.assets['images/question1.mp3'].clone().play();
 			game.replaceScene(senLevel);
 			State = 1;
 			LevelFCnt = 0;
@@ -476,6 +497,8 @@ window.onload = function() {
 		senGameOver.addChild(sprRetryBtn);
 
 		var PreGameOver = function(Type) {  // シーン：ゲームオーバーへの遷移前処理
+			game.assets['images/bgm2-6.mp3'].stop();
+			game.assets['images/incorrect1.mp3'].clone().play();
 			switch(Type) {
 				case 1:
 					sprMimi3.frame = 2;
