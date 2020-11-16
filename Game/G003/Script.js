@@ -65,7 +65,7 @@ window.onload = function () {
 
 	//ゲーム開始
 	game.start();
-
+	
 	//読み込み終わり
 	/////////////////////////////////////////////////
 	game.onload = function () {	//ロードが終わった後にこの関数が呼び出される
@@ -494,7 +494,7 @@ window.onload = function () {
 
 			//S_BackHomeクリック
 			S_BackHome.ontouchend = function () {				//HOMEへ移動
-				window.location.href = '../../index.html'; 
+				top.location.href = '../../index.html'; 
 			};
 		}
 
